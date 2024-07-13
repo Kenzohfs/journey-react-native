@@ -5,6 +5,7 @@ import { StatusBar, View } from "react-native";
 
 import { Loading } from "@/components/loading";
 
+import { I18nProvider } from "@/hooks/useI18n";
 import {
   Inter_400Regular,
   Inter_500Medium,
@@ -22,13 +23,15 @@ export default function Layout() {
   if (!fontsLoaded) return <Loading />;
 
   return (
-    <View className="flex-1 bg-zinc-950">
-      <StatusBar
-        barStyle={"light-content"}
-        backgroundColor={"transparent"}
-        translucent
-      />
-      <Slot />
-    </View>
+    <I18nProvider>
+      <View className="flex-1 bg-zinc-950">
+        <StatusBar
+          barStyle={"light-content"}
+          backgroundColor={"transparent"}
+          translucent
+        />
+        <Slot />
+      </View>
+    </I18nProvider>
   );
 }
