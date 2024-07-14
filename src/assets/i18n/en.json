@@ -1,3 +1,11 @@
 {
-    "inviteFriendsAndPlanTrip": "Invite your friends and plan your next trip"
+    "inviteFriendsAndPlanTrip": "Invite your friends and plan your\nnext trip",
+    "toWhereQuestion": "Where to?",
+    "whenQuestion": "When?",
+    "updateLocalDate": "Update local/date",
+    "whoIsGoingQuestion": "Who will be on the trip?",
+    "continue": "Continue",
+    "acceptPrivacyAndPolicyTerms": "By planning your trip through plann.er you automatically agree to our",
+    "useTermsAndPrivacyPolicy": "terms of use and privacy policies.",
+    "confirmTrip": "Confirm trip"
 }

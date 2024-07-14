@@ -1,3 +1,11 @@
 {
-    "inviteFriendsAndPlanTrip": "Convide seus amigos e planeje sua próxima viagem"
+    "inviteFriendsAndPlanTrip": "Convide seus amigos e planeje sua\npróxima viagem",
+    "toWhereQuestion": "Para onde?",
+    "whenQuestion": "Quando?",
+    "updateLocalDate": "Atualizar local/data",
+    "whoIsGoingQuestion": "Quem estará na viagem?",
+    "continue": "Continuar",
+    "acceptPrivacyAndPolicyTerms": "Ao planejar sua viagem pela plann.er você automaticamente concorda com nossos",
+    "useTermsAndPrivacyPolicy": "termos de uso e política de privacidade.",
+    "confirmTrip": "Confirmar viagem"
 }
