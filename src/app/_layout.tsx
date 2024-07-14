@@ -1,10 +1,12 @@
 import "@/styles/global.css";
+import "@/utils/dayjsLocaleConfig";
 
 import { Slot } from "expo-router";
 import { StatusBar, View } from "react-native";
 
 import { Loading } from "@/components/loading";
 
+import { CalendarProvider } from "@/hooks/useCalendar";
 import { I18nProvider } from "@/hooks/useI18n";
 import {
   Inter_400Regular,
@@ -24,14 +26,16 @@ export default function Layout() {
 
   return (
     <I18nProvider>
-      <View className="flex-1 bg-zinc-950">
-        <StatusBar
-          barStyle={"light-content"}
-          backgroundColor={"transparent"}
-          translucent
-        />
-        <Slot />
-      </View>
+      <CalendarProvider>
+        <View className="flex-1 bg-zinc-950">
+          <StatusBar
+            barStyle={"light-content"}
+            backgroundColor={"transparent"}
+            translucent
+          />
+          <Slot />
+        </View>
+      </CalendarProvider>
     </I18nProvider>
   );
 }

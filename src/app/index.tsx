@@ -1,4 +1,3 @@
-import { useI18n } from "@/hooks/useI18n";
 import {
   ArrowRight,
   Calendar as IconCalendar,
@@ -6,27 +5,74 @@ import {
   Settings2,
   UserRoundPlus,
 } from "lucide-react-native";
-import { Image, Text, View } from "react-native";
+import { useState } from "react";
+import { Alert, Image, Keyboard, Text, View } from "react-native";
+import { DateData } from "react-native-calendars";
 
 import { Button } from "@/components/button";
+import { Calendar } from "@/components/calendar";
 import { Input } from "@/components/input";
+import { Modal } from "@/components/modal";
+import { DatesSelected, useCalendar } from "@/hooks/useCalendar";
+import { useI18n } from "@/hooks/useI18n";
 import { colors } from "@/styles/colors";
-import { useState } from "react";
+import dayjs from "dayjs";
 
-enum StepForm {
+enum STEP_FORM {
   TRIP_DETAILS = 1,
   ADD_EMAIL = 2,
 }
 
+enum MODAL {
+  NONE = 0,
+  CALENDAR = 1,
+  GUESTS = 2,
+}
+
 export default function Index() {
   const { t, keys } = useI18n();
+  const { orderStartsAtAndEndsAt } = useCalendar();
 
-  const [stepForm, setStepForm] = useState<StepForm>(StepForm.TRIP_DETAILS);
+  const [stepForm, setStepForm] = useState<STEP_FORM>(STEP_FORM.TRIP_DETAILS);
+  const [showModal, setShowModal] = useState(MODAL.NONE);
+  const [selectedDates, setSelectedDates] = useState<DatesSelected>(
+    {} as DatesSelected
+  );
+  const [destination, setDestination] = useState<string>("");
 
   const handleNextStepForm = () => {
-    if (stepForm === StepForm.TRIP_DETAILS) {
-      setStepForm(StepForm.ADD_EMAIL);
+    debugger;
+    if (
+      destination.trim().length === 0 ||
+      !selectedDates.startsAt ||
+      !selectedDates.endsAt
+    ) {
+      return Alert.alert(
+        t(keys.TRIP_DETAILS),
+        t(keys.INPUT_ALL_INFO_TO_CONTINUE)
+      );
     }
+
+    if (destination.trim().length < 4) {
+      return Alert.alert(
+        t(keys.TRIP_DETAILS),
+        t(keys.DESTINATION) + " " + t(keys.ERROR_AT_LEAST_4_CHAR)
+      );
+    }
+
+    if (stepForm === STEP_FORM.TRIP_DETAILS) {
+      setStepForm(STEP_FORM.ADD_EMAIL);
+    }
+  };
+
+  const handleSelectDate = (selectedDay: DateData) => {
+    const dates = orderStartsAtAndEndsAt({
+      startsAt: selectedDates.startsAt,
+      endsAt: selectedDates.endsAt,
+      selectedDay,
+    });
+
+    setSelectedDates(dates);
   };
 
   return (
@@ -48,7 +94,9 @@ export default function Index() {
           <MapPin color={colors.zinc[400]} size={20} />
           <Input.Field
             placeholder={t(keys.TO_WHERE_QUESTION)}
-            editable={stepForm === StepForm.TRIP_DETAILS}
+            editable={stepForm === STEP_FORM.TRIP_DETAILS}
+            onChangeText={setDestination}
+            value={destination}
           ></Input.Field>
         </Input>
 
@@ -56,16 +104,23 @@ export default function Index() {
           <IconCalendar color={colors.zinc[400]} size={20} />
           <Input.Field
             placeholder={t(keys.WHEN_QUESTION)}
-            editable={stepForm === StepForm.TRIP_DETAILS}
+            editable={stepForm === STEP_FORM.TRIP_DETAILS}
+            onFocus={() => Keyboard.dismiss()}
+            showSoftInputOnFocus={false}
+            onPressIn={() =>
+              stepForm === STEP_FORM.TRIP_DETAILS &&
+              setShowModal(MODAL.CALENDAR)
+            }
+            value={selectedDates.formatDatesInText}
           ></Input.Field>
         </Input>
 
-        {stepForm === StepForm.ADD_EMAIL && (
+        {stepForm === STEP_FORM.ADD_EMAIL && (
           <>
             <View className="border-b py-3 border-zinc-800">
               <Button
                 variant="secondary"
-                onPress={() => setStepForm(StepForm.TRIP_DETAILS)}
+                onPress={() => setStepForm(STEP_FORM.TRIP_DETAILS)}
               >
                 <Button.Title>{t(keys.UPDATE_LOCAL_DATE)}</Button.Title>
                 <Settings2 color={colors.zinc[200]} size={20} />
@@ -82,7 +137,7 @@ export default function Index() {
         )}
 
         <Button onPress={handleNextStepForm}>
-          {stepForm === StepForm.TRIP_DETAILS ? (
+          {stepForm === STEP_FORM.TRIP_DETAILS ? (
             <Button.Title>{t(keys.CONTINUE)}</Button.Title>
           ) : (
             <Button.Title>{t(keys.CONFIRM_TRIP)}</Button.Title>
@@ -97,6 +152,25 @@ export default function Index() {
           {t(keys.USE_TERMS_AND_PRIVACY_POLICY)}
         </Text>
       </Text>
+
+      <Modal
+        title={t(keys.SELECT_DATE)}
+        subtitle={t(keys.SELECT_DATES_INFO)}
+        visible={showModal === MODAL.CALENDAR}
+        onClose={() => setShowModal(MODAL.NONE)}
+      >
+        <View className="gap-4 mt-4">
+          <Calendar
+            minDate={dayjs().toISOString()}
+            onDayPress={handleSelectDate}
+            markedDates={selectedDates.dates}
+          />
+
+          <Button onPress={() => setShowModal(MODAL.NONE)}>
+            <Button.Title>{t(keys.CONFIRM)}</Button.Title>
+          </Button>
+        </View>
+      </Modal>
     </View>
   );
 }

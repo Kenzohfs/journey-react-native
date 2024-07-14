@@ -7,5 +7,14 @@
     "continue": "Continue",
     "acceptPrivacyAndPolicyTerms": "By planning your trip through plann.er you automatically agree to our",
     "useTermsAndPrivacyPolicy": "terms of use and privacy policies.",
-    "confirmTrip": "Confirm trip"
+    "confirmTrip": "Confirm trip",
+    "selectDate": "Select dates",
+    "selectDatesInfo": "Select the departure and return date of the trip",
+    "confirm": "Confirm",
+    "until": "until",
+    "of": "of",
+    "tripDetails": "Trip details",
+    "inputAllInfoToContinue": "Fill in all the information to continue.",
+    "destination": "Destination",
+    "errorAtLeast4Char": "must have at least 4 characters"
 }

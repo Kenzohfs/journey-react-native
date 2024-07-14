@@ -7,5 +7,14 @@
     "continue": "Continuar",
     "acceptPrivacyAndPolicyTerms": "Ao planejar sua viagem pela plann.er você automaticamente concorda com nossos",
     "useTermsAndPrivacyPolicy": "termos de uso e política de privacidade.",
-    "confirmTrip": "Confirmar viagem"
+    "confirmTrip": "Confirmar viagem",
+    "selectDate": "Selecionar datas",
+    "selectDatesInfo": "Selecione a data de ida e volta da viagem",
+    "confirm": "Confirmar",
+    "until": "à",
+    "of": "de",
+    "tripDetails": "Detalhes da viagem",
+    "inputAllInfoToContinue": "Preencha todas as informações para seguir.",
+    "destination": "Destino",
+    "errorAtLeast4Char": "deve ter pelo menos 4 caracteres"
 }
