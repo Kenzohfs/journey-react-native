@@ -17,6 +17,9 @@ const keys = {
   INPUT_ALL_INFO_TO_CONTINUE: "inputAllInfoToContinue",
   DESTINATION: "destination",
   ERROR_AT_LEAST_4_CHAR: "errorAtLeast4Char",
+  SELECT_GUESTS: "selectGuests",
+  GUESTS_INFO: "guestsInfo",
+  TYPE_GUEST_EMAIL: "typeGuestEmail",
 } as const;
 
 export default keys;

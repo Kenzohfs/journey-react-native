@@ -16,5 +16,8 @@
     "tripDetails": "Detalhes da viagem",
     "inputAllInfoToContinue": "Preencha todas as informações para seguir.",
     "destination": "Destino",
-    "errorAtLeast4Char": "deve ter pelo menos 4 caracteres"
+    "errorAtLeast4Char": "deve ter pelo menos 4 caracteres",
+    "selectGuests": "Selecionar convidados",
+    "guestsInfo": "Os convidados irão receber e-mails para confirmar a participação na viagem.",
+    "typeGuestEmail": "Digite o e-mail do convidado"
 }
