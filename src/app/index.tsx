@@ -1,3 +1,5 @@
+import dayjs from "dayjs";
+import { router } from "expo-router";
 import {
   ArrowRight,
   AtSign,
@@ -6,7 +8,7 @@ import {
   Settings2,
   UserRoundPlus,
 } from "lucide-react-native";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Alert, Image, Keyboard, Text, View } from "react-native";
 import { DateData } from "react-native-calendars";
 
@@ -14,14 +16,14 @@ import { Button } from "@/components/button";
 import { Calendar } from "@/components/calendar";
 import { GuestEmail } from "@/components/email";
 import { Input } from "@/components/input";
+import { Loading } from "@/components/loading";
 import { Modal } from "@/components/modal";
 import { DatesSelected, useCalendar } from "@/hooks/useCalendar";
 import { useI18n } from "@/hooks/useI18n";
+import { tripServer } from "@/server/trip-server";
 import { tripStorage } from "@/storage/trip";
 import { colors } from "@/styles/colors";
 import { validateInput } from "@/utils/validateInput";
-import dayjs from "dayjs";
-import { router } from "expo-router";
 
 enum STEP_FORM {
   TRIP_DETAILS = 1,
@@ -47,6 +49,7 @@ export default function Index() {
   const [emailToInvite, setEmailToInvite] = useState<string>("");
   const [emailsToInvite, setEmailsToInvite] = useState<string[]>([]);
   const [isCreatingTrip, setIsCreatingTrip] = useState<boolean>(false);
+  const [isGettingTrip, setIsGettingTrip] = useState<boolean>(true);
 
   const handleNextStepForm = () => {
     if (
@@ -68,7 +71,7 @@ export default function Index() {
     }
 
     if (stepForm === STEP_FORM.TRIP_DETAILS) {
-      setStepForm(STEP_FORM.ADD_EMAIL);
+      return setStepForm(STEP_FORM.ADD_EMAIL);
     }
 
     Alert.alert("Nova viagem", "Confirmar viagem?", [
@@ -122,7 +125,56 @@ export default function Index() {
     }
   };
 
-  const createTrip = async () => {};
+  const createTrip = async () => {
+    try {
+      setIsCreatingTrip(true);
+
+      const newTrip = await tripServer.create({
+        destination,
+        starts_at: dayjs(selectedDates.startsAt?.dateString).toString(),
+        ends_at: dayjs(selectedDates.endsAt?.dateString).toString(),
+        emails_to_invite: emailsToInvite,
+      });
+
+      Alert.alert("Nova viagem", "Viagem criada com sucesso!", [
+        {
+          text: "OK. Continuar.",
+          onPress: () => saveTrip(newTrip.tripId),
+        },
+      ]);
+    } catch (err) {
+      console.log(err);
+      setIsCreatingTrip(false);
+    }
+  };
+
+  const getTrip = async () => {
+    try {
+      const tripId = await tripStorage.get();
+
+      if (!tripId) {
+        return setIsGettingTrip(false);
+      }
+
+      const trip = await tripServer.getById(tripId);
+
+      if (trip) {
+        console.log(trip);
+        return router.navigate(`/trip/${trip.id}`);
+      }
+    } catch (err) {
+      setIsCreatingTrip(false);
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    getTrip();
+  }, []);
+
+  if (isGettingTrip) {
+    return <Loading />;
+  }
 
   return (
     <View className="flex-1 items-center justify-center px-5">
