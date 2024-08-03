@@ -20,6 +20,7 @@ const keys = {
   SELECT_GUESTS: "selectGuests",
   GUESTS_INFO: "guestsInfo",
   TYPE_GUEST_EMAIL: "typeGuestEmail",
+  NEW_TRIP: "newTrip",
 } as const;
 
 export default keys;

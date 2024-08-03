@@ -19,5 +19,6 @@
     "errorAtLeast4Char": "must have at least 4 characters",
     "selectGuests": "Select guests",
     "guestsInfo": "Guests will receive emails to confirm their participation in the trip.",
-    "typeGuestEmail": "Type the guest's email"
+    "typeGuestEmail": "Type the guest's email",
+    "newTrip": "New trip"
 }

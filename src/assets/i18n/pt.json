@@ -19,5 +19,6 @@
     "errorAtLeast4Char": "deve ter pelo menos 4 caracteres",
     "selectGuests": "Selecionar convidados",
     "guestsInfo": "Os convidados irão receber e-mails para confirmar a participação na viagem.",
-    "typeGuestEmail": "Digite o e-mail do convidado"
+    "typeGuestEmail": "Digite o e-mail do convidado",
+    "newTrip": "Nova viagem"
 }

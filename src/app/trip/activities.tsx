@@ -7,6 +7,7 @@ import { Activity, ActivityProps } from "@/components/activity";
 import { Button } from "@/components/button";
 import { Calendar } from "@/components/calendar";
 import { Input } from "@/components/input";
+import { Loading } from "@/components/loading";
 import { Modal } from "@/components/modal";
 import { activitiesServer } from "@/server/activities-server";
 import { colors } from "@/styles/colors";
@@ -58,6 +59,7 @@ export function Activities({ tripDetails }: Props) {
 
       Alert.alert("Nova atividade", "Nova atividade cadastrada com sucesso!");
 
+      await getTripActivities();
       resetNewActivityForm();
     } catch (err) {
       console.error(err);
@@ -87,13 +89,13 @@ export function Activities({ tripDetails }: Props) {
         data: dayActivity.activities.map((activity) => ({
           id: activity.id,
           title: activity.title,
-          hour: dayjs(activity.occurs_at).format("HH:mm[h]"),
+          hour: dayjs(activity.occurs_at).format("hh[:]mm[h]"),
           isBefore: dayjs(activity.occurs_at).isBefore(dayjs()),
         })),
       }));
 
       setTripActivities(activitiesToSectionList);
-      console.log(tripActivities);
+      console.log("tripActivities", tripActivities);
     } catch (err) {
       console.log(err);
     } finally {
@@ -117,26 +119,33 @@ export function Activities({ tripDetails }: Props) {
           <Button.Title>Nova Atividade</Button.Title>
         </Button>
       </View>
-
-      <SectionList
-        sections={tripActivities}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => <Activity data={item} />}
-        renderSectionHeader={({ section }) => (
-          <View className="w-full">
-            <Text className="text-zinc-50 text-2xl font-semibold py-2">
-              Dia {section.title.dayNumber}{" "}
-              <Text className="text-zinc-500 text-base font-regular capitalize">
-                {section.title.dayName}
+      {isLoadingActivities ? (
+        <Loading />
+      ) : (
+        <SectionList
+          sections={tripActivities}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => <Activity data={item} />}
+          renderSectionHeader={({ section }) => (
+            <View className="w-full">
+              <Text className="text-zinc-50 text-2xl font-semibold py-2">
+                Dia {section.title.dayNumber}{" "}
+                <Text className="text-zinc-500 text-base font-regular capitalize">
+                  {section.title.dayName}
+                </Text>
               </Text>
-            </Text>
 
-            {section.data.length === 0 && (
-              <Text className="text-zinc-500 font-regular text-sm mb-8"></Text>
-            )}
-          </View>
-        )}
-      />
+              {section.data.length === 0 && (
+                <Text className="text-zinc-500 font-regular text-sm mb-8">
+                  Nenhuma atividade cadastrada nessa data.
+                </Text>
+              )}
+            </View>
+          )}
+          contentContainerClassName="gap-3 pb-48"
+          showsVerticalScrollIndicator={false}
+        />
+      )}
 
       <Modal
         visible={showModal === MODAL.NEW_ACTIVITY}

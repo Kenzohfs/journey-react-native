@@ -74,7 +74,7 @@ export default function Index() {
       return setStepForm(STEP_FORM.ADD_EMAIL);
     }
 
-    Alert.alert("Nova viagem", "Confirmar viagem?", [
+    Alert.alert(t(keys.NEW_TRIP), "Confirmar viagem?", [
       { text: "Não", style: "cancel" },
       { text: "Sim", onPress: createTrip },
     ]);
